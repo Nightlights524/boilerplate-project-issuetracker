@@ -43,16 +43,19 @@ module.exports = async function (app) {
     try {
       let project = req.params.project;
       const createdDate = new Date();
-      const issue_title = req.body.issue_title;
-      const issue_text = req.body.issue_text;
-      const created_by = req.body.created_by;
-
+      const issue_title = req.body.issue_title || "";
+      const issue_text = req.body.issue_text || "";
+      const created_by = req.body.created_by || "";
+      
       if (issue_title === "" ||
           issue_text === "" ||
           created_by === "") 
       {
         return res.json({ error: 'required field(s) missing' });
       }
+
+      const assigned_to = req.body.assigned_to || "";
+      const status_text = req.body.status_text || "";
 
       const newIssue = await Issue.create({
         project: project,
@@ -61,10 +64,10 @@ module.exports = async function (app) {
         created_on: createdDate,
         updated_on: createdDate,
         created_by: created_by,
-        assigned_to: req.body.assigned_to,
+        assigned_to: assigned_to,
         open: true,
-        status_text: req.body.status_text
-        });
+        status_text: status_text
+      });
 
       return res.json(newIssue);
     }
