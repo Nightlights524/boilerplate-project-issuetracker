@@ -43,24 +43,34 @@ module.exports = async function (app) {
     try {
       let project = req.params.project;
       const createdDate = new Date();
+      const issue_title = req.body.issue_title;
+      const issue_text = req.body.issue_text;
+      const created_by = req.body.created_by;
+
+      if (issue_title === "" ||
+          issue_text === "" ||
+          created_by === "") 
+      {
+        return res.json({ error: 'required field(s) missing' });
+      }
 
       const newIssue = await Issue.create({
         project: project,
-        issue_title: req.body.issue_title,
-        issue_text: req.body.issue_text,
+        issue_title: issue_title,
+        issue_text: issue_text,
         created_on: createdDate,
         updated_on: createdDate,
-        created_by: req.body.created_by,
+        created_by: created_by,
         assigned_to: req.body.assigned_to,
         open: true,
         status_text: req.body.status_text
         });
 
-      res.json(newIssue);
+      return res.json(newIssue);
     }
     catch (error) {
       console.error(error.message);
-      res.send(error.message);
+      return res.send(error.message);
     }
   })
   
