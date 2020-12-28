@@ -98,9 +98,10 @@ module.exports = async function (app) {
       //   return res.json({error: 'no update field(s) sent', _id: req.body._id });
       // }
 
-      // const project = req.params.project;
+      // Merge updated date with request.body
+      const requestData = Object.assign({updated_on: new Date()}, req.body);
 
-      const updatedDoc = await Issue.findByIdAndUpdate(req.body._id, req.body, {new: true}).exec();
+      const updatedDoc = await Issue.findByIdAndUpdate(req.body._id, requestData, {new: true}).exec();
 
       console.log(updatedDoc);
 
