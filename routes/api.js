@@ -28,8 +28,10 @@ module.exports = async function (app) {
   
   .get(async function (req, res){
     try {
-      let project = req.params.project;
-      const documents = await Issue.find({project: project}).exec();
+      // let project = req.params.project;
+      const queryObject = Object.assign({project: req.params.project}, req.query);
+
+      const documents = await Issue.find(queryObject).exec();
       // const documents = await Issue.find({project: project}).orFail().exec();
       res.json(documents);
     }
