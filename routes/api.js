@@ -42,6 +42,14 @@ module.exports = async function (app) {
   
   .post(async function (req, res){
     try {
+      // Check to make sure request has required fields
+      if (!req.body.hasOwnProperty('issue_title') ||
+          !req.body.hasOwnProperty('issue_text') ||
+          !req.body.hasOwnProperty('created_by'))
+      {
+        return res.json({ error: 'required field(s) missing' });
+      }
+
       let project = req.params.project;
       const createdDate = new Date();
       const issue_title = req.body.issue_title || "";
@@ -50,12 +58,12 @@ module.exports = async function (app) {
       const assigned_to = req.body.assigned_to || "";
       const status_text = req.body.status_text || "";
       
-      if (issue_title === "" ||
-          issue_text === "" ||
-          created_by === "") 
-      {
-        return res.json({ error: 'required field(s) missing' });
-      }
+      // if (issue_title === "" ||
+      //     issue_text === "" ||
+      //     created_by === "") 
+      // {
+      //   return res.json({ error: 'required field(s) missing' });
+      // }
 
       const newIssue = await Issue.create({
         project: project,
