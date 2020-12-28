@@ -92,11 +92,11 @@ module.exports = async function (app) {
         return res.json({error: 'missing _id'});
       }
 
-      // // Then make sure request has other update fields
-      // if (request doesn't have update fields))
-      // {
-      //   return res.json({error: 'no update field(s) sent', _id: req.body._id });
-      // }
+      // Then return error if request doesn't have other update fields
+      if (Object.keys(req.body).length === 1)
+      {
+        return res.json({error: 'no update field(s) sent', _id: req.body._id });
+      }
 
       // Merge updated date with request.body
       const requestData = Object.assign({updated_on: new Date()}, req.body);
