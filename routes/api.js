@@ -43,9 +43,9 @@ module.exports = async function (app) {
   .post(async function (req, res){
     try {
       // Check to make sure request has required fields
-      if (!req.body.hasOwnProperty('issue_title') ||
-          !req.body.hasOwnProperty('issue_text') ||
-          !req.body.hasOwnProperty('created_by'))
+      if (!Object.prototype.hasOwnProperty.call(req.body, 'issue_title') ||
+          !Object.prototype.hasOwnProperty.call(req.body, 'issue_text') ||
+          !Object.prototype.hasOwnProperty.call(req.body, 'created_by'))
       {
         return res.json({ error: 'required field(s) missing' });
       }
