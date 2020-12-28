@@ -28,7 +28,6 @@ module.exports = async function (app) {
   
   .get(async function (req, res){
     try {
-      // let project = req.params.project;
       const queryObject = Object.assign({project: req.params.project}, req.query);
 
       const documents = await Issue.find(queryObject).exec();
@@ -48,6 +47,8 @@ module.exports = async function (app) {
       const issue_title = req.body.issue_title || "";
       const issue_text = req.body.issue_text || "";
       const created_by = req.body.created_by || "";
+      const assigned_to = req.body.assigned_to || "";
+      const status_text = req.body.status_text || "";
       
       if (issue_title === "" ||
           issue_text === "" ||
@@ -55,9 +56,6 @@ module.exports = async function (app) {
       {
         return res.json({ error: 'required field(s) missing' });
       }
-
-      const assigned_to = req.body.assigned_to || "";
-      const status_text = req.body.status_text || "";
 
       const newIssue = await Issue.create({
         project: project,
@@ -91,11 +89,19 @@ module.exports = async function (app) {
   
   .delete(async function (req, res){
     try {
-      let project = req.params.project;
+      // let project = req.params.project;
+
+      if (!req.body._id) {
+        return res.json({error: 'missing _id' });
+      }
+
+      const deletedDoc = await Issue.findByIdAndDelete(req.body._id).exec();
+
+      return res.json({result: 'successfully deleted', '_id': deletedDoc._id});
     }
     catch (error) {
       console.error(error.message);
-      res.send(error.message);
+      return res.json({error: 'could not delete', '_id': req.body._id});
     }
   });
 };
