@@ -84,8 +84,6 @@ module.exports = async function (app) {
   
   .put(async function (req, res){
     try {
-      console.log(req.body);
-
       // First check to make sure the request has the required '_id' field
       if (!Object.prototype.hasOwnProperty.call(req.body, '_id'))
       {
@@ -103,8 +101,6 @@ module.exports = async function (app) {
 
       const updatedDoc = await Issue.findByIdAndUpdate(req.body._id, requestData, {new: true}).exec();
 
-      console.log(updatedDoc);
-
       return res.json({result: 'successfully updated', _id: updatedDoc._id})
     }
     catch (error) {
@@ -115,7 +111,7 @@ module.exports = async function (app) {
   
   .delete(async function (req, res){
     try {
-      if (!req.body._id) {
+      if (!Object.prototype.hasOwnProperty.call(req.body, '_id')) {
         return res.json({error: 'missing _id' });
       }
 
