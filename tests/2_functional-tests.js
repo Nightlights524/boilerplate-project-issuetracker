@@ -130,8 +130,57 @@ suite('Functional Tests', () => {
   });
 
   // Update one field on an issue: PUT request to /api/issues/{project}
-  // Update multiple fields on an issue: PUT request to /api/issues/{project}
-  
+  test('Update one field on an issue', done => {
+    chai.request(server)
+      .post(`/api/issues/${project}`)
+      .send({
+        issue_title: 'TO BE UPDATED',
+        issue_text: 'TO BE UPDATED',
+        created_by: 'TO BE UPDATED'
+      })
+      .end((err, res) => {
+        const id = res.body._id
+        chai.request(server)
+          .put(`/api/issues/${project}`)
+          .send({
+            _id: id,
+            issue_title: 'UPDATED'
+          })
+          .end((err, res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.body.result, 'successfully updated');
+            assert.equal(res.body._id, id);
+            done();
+          });
+      });
+  });
+
+  test('Update multiple fields on an issue', done => {
+    chai.request(server)
+      .post(`/api/issues/${project}`)
+      .send({
+        issue_title: 'TO BE UPDATED',
+        issue_text: 'TO BE UPDATED',
+        created_by: 'TO BE UPDATED'
+      })
+      .end((err, res) => {
+        const id = res.body._id
+        chai.request(server)
+          .put(`/api/issues/${project}`)
+          .send({
+            _id: id,
+            issue_title: 'UPDATED',
+            issue_text: 'UPDATED'
+          })
+          .end((err, res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.body.result, 'successfully updated');
+            assert.equal(res.body._id, id);
+            done();
+          });
+      });
+  });
+
   test('Update an issue with missing _id', done => {
     chai.request(server)
       .put(`/api/issues/${project}`)
