@@ -129,7 +129,6 @@ suite('Functional Tests', () => {
     });
   });
 
-  // Update one field on an issue: PUT request to /api/issues/{project}
   test('Update one field on an issue', done => {
     chai.request(server)
       .post(`/api/issues/${project}`)
